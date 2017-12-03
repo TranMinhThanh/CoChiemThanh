@@ -7,16 +7,13 @@ package src.chess;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import static javafx.scene.input.KeyCode.O;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -25,7 +22,7 @@ import src.pieces.Knight;
 /**
  *
  * @author ThanhTM
- * chưa check trường hợp bị ăn hết quân hay trường hợp không còn nước nào để đi
+ * chưa check trường hợp không còn nước nào để đi
  */
 public class main extends JFrame implements MouseListener{
     public static main mainBoard;
@@ -36,6 +33,10 @@ public class main extends JFrame implements MouseListener{
     
     //quân cờ
     private static Knight O,P,Q,K,L,M;
+    
+    //mảng lưu giá trị vị trí của các phe
+    public ArrayList<Cell> black = new ArrayList<Cell>();
+    public ArrayList<Cell> white = new ArrayList<Cell>();
     
     // bàn cờ
     private JPanel board=new JPanel(new GridLayout(8,8));
@@ -99,6 +100,7 @@ public class main extends JFrame implements MouseListener{
         Cell cell;
         boardState=new Cell[8][8];
 	for(int i=0;i<8;i++)
+        {
             for(int j=0;j<8;j++)
             {	
                 piece = null;    
@@ -116,6 +118,11 @@ public class main extends JFrame implements MouseListener{
                 if ( (i==7) && (j==7) )
                     piece = M;
 		cell=new Cell(i,j,piece);
+                if (piece != null)
+                    if (piece.getColor() == 1) 
+                        black.add(cell);
+                    else
+                        white.add(cell);
                 
 		cell.addMouseListener(this);
 		board.add(cell);
@@ -133,6 +140,7 @@ public class main extends JFrame implements MouseListener{
                 if ( (i==7) && (j==4) )
                     castleCell.add(cell);
             }
+        }
         
         // tạo khung điều khiển bên phải
         controlPanel = new JPanel();
@@ -193,10 +201,25 @@ public class main extends JFrame implements MouseListener{
                 if (c.isMoveable())
                 {
                     // ăn quân của đối phương thì sẽ xóa quân của đối phương đi
-                    if (c.getPiece() != null)
+                    if (c.getPiece() != null){
+                        if (c.getPiece().getColor() == 1)
+                            black.remove(c);
+                        else 
+                            white.remove(c);
                         c.removePiece();
+                    }
                     // di chuyển quân đã chọn vào vị trí
                     c.setPiece(previousCell.getPiece());
+                    if (c.getPiece().getColor() == 1){
+                        black.remove(previousCell);
+                        black.add(c);
+                    }
+                    else
+                    {
+                        white.remove(previousCell);
+                        white.add(c);
+                    }
+                        
                     previousCell.removePiece();
 
                     removeHightlightMoveableDes(moveableDesList);
@@ -302,9 +325,9 @@ public class main extends JFrame implements MouseListener{
     // trả về 0: trắng thắng, 1: đen thắng, 2: chưa kết thúc
     public int gameEnd()
     {
-        if (boardState[0][4].getPiece() != null && boardState[0][4].getPiece().getColor() == 1)
+        if (boardState[0][4].getPiece() != null && boardState[0][4].getPiece().getColor() == 1 || white.isEmpty())
             return 1;
-        if (boardState[7][4].getPiece() != null && boardState[7][4].getPiece().getColor() == 0)
+        if (boardState[7][4].getPiece() != null && boardState[7][4].getPiece().getColor() == 0 || black.isEmpty())
             return 0;
         return 2;
     }
