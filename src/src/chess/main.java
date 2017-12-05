@@ -18,7 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import src.pieces.Knight;
-
+import java.lang.Object;
+import java.util.Random;
 /**
  *
  * @author ThanhTM
@@ -37,6 +38,7 @@ public class main extends JFrame implements MouseListener{
     //mảng lưu giá trị vị trí của các phe
     public ArrayList<Cell> black = new ArrayList<Cell>();
     public ArrayList<Cell> white = new ArrayList<Cell>();
+    public Object []team = {white, black};
     
     // bàn cờ
     private JPanel board=new JPanel(new GridLayout(8,8));
@@ -59,6 +61,10 @@ public class main extends JFrame implements MouseListener{
     private int forceColor = 0;
     // xác định nước trước ai đã điều khiển, mặc định là 1 
     private int previousForceColor = 1;
+    
+    // quân người chơi điều khiển
+    private int humanColor;
+    private int computerColor;
     
     // ô máy bay
     private ArrayList<Cell> planeCell = new ArrayList<Cell>();
@@ -148,15 +154,18 @@ public class main extends JFrame implements MouseListener{
         // tạo khung chơi cờ bên trái
         temp = new JPanel();
         split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, board, controlPanel);
-		
+        //chọn OK = 0, No = 1, CANCEL = 2 (cho về 0)
+	humanColor = JOptionPane.showConfirmDialog(board, "Do you want to choose white?");
+        if (humanColor == 2)
+            humanColor = 0;
+        computerColor = 1 - humanColor;
 	content.add(split);
         
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent me) {
-        Cell c = (Cell)me.getSource();
+    // đi 1 nước
+    public void play(Cell c){
         if (previousCell == null && previousPlaneCell == null){
             if (c.getPiece() != null){  
                 if (c.getPiece().getColor() != forceColor)
@@ -264,6 +273,18 @@ public class main extends JFrame implements MouseListener{
             }
         }
     }
+    
+    // fix chỉ cho quân người chơi điều khiển đi
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        Cell c = (Cell)me.getSource();
+        
+        if (forceColor != humanColor)
+            return;
+   
+        else
+            play(c);
+    }
 
     @Override
     public void mousePressed(MouseEvent me) {
@@ -304,6 +325,14 @@ public class main extends JFrame implements MouseListener{
     		it.next().unsetMoveableDes();
     }
     
+    // lượt đi của máy
+    public void computer_move(){
+        Random r = new Random();
+//        int i = r.ints(0, )
+//        Cell c = (team[computerColor]);
+                     
+    }
+    
     // kiểm tra đến lượt của bên nào đi
     public void checkTurn(Cell c)
     {
@@ -316,6 +345,8 @@ public class main extends JFrame implements MouseListener{
         }
         else
         {
+            //check team đối phương còn nước đi hay không
+            
             // đổi bên đi
             forceColor ^= 1;
         }
