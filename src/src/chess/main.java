@@ -20,6 +20,7 @@ import javax.swing.JSplitPane;
 import src.pieces.Knight;
 import java.lang.Object;
 import java.util.Random;
+import java.util.stream.IntStream;
 /**
  *
  * @author ThanhTM
@@ -88,8 +89,7 @@ public class main extends JFrame implements MouseListener{
         
         mainBoard = new main();
         mainBoard.setVisible(true);
-        
-        
+                
     }
     
     //contructor
@@ -326,11 +326,29 @@ public class main extends JFrame implements MouseListener{
     }
     
     // lượt đi của máy
-    public void computer_move(){
+    public void computer_move() {
         Random r = new Random();
 //        int i = r.ints(0, )
 //        Cell c = (team[computerColor]);
-                     
+        int randomX, randomY;
+        Cell randomCell;
+        boolean randomCellComplete = false;
+        Cell[] cellsOfKnights_computer = (Cell[]) team[computerColor];
+        do {
+            randomX = r.nextInt(9);
+            randomY = r.nextInt(9);
+            for (Cell c : cellsOfKnights_computer) {
+                if (randomX == c.getX() && randomY == c.getY()) {
+                    randomCellComplete = true;
+                    randomCell = c;
+                    break;
+                } 
+                if (randomCellComplete) break;
+            }
+        } while (true);
+//        play(randomCell); // t ko sua duoc de play duoc randomCell vua tim ben tren
+//        moveableDesList = randomCell.getPiece()
+        
     }
     
     // kiểm tra đến lượt của bên nào đi
