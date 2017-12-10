@@ -328,27 +328,15 @@ public class main extends JFrame implements MouseListener{
     // lượt đi của máy
     public void computer_move() {
         Random r = new Random();
-//        int i = r.ints(0, )
-//        Cell c = (team[computerColor]);
-        int randomX, randomY;
-        Cell randomCell;
-        boolean randomCellComplete = false;
-        Cell[] cellsOfKnights_computer = (Cell[]) team[computerColor];
-        do {
-            randomX = r.nextInt(9);
-            randomY = r.nextInt(9);
-            for (Cell c : cellsOfKnights_computer) {
-                if (randomX == c.getX() && randomY == c.getY()) {
-                    randomCellComplete = true;
-                    randomCell = c;
-                    break;
-                } 
-                if (randomCellComplete) break;
-            }
-        } while (true);
-//        play(randomCell); // t ko sua duoc de play duoc randomCell vua tim ben tren
-//        moveableDesList = randomCell.getPiece()
-        
+        // random vị trí quân cờ
+        int i = r.nextInt(((ArrayList<Cell>)team[computerColor]).size());
+        Cell c = ((ArrayList<Cell>)team[computerColor]).get(i);
+        System.out.print("Đi quân cờ từ vị trí (" + c.x + " - " + c.y);
+        play(c);
+        //random vị trí đi, lúc này play đã tự fill dữ liệu vào moveableDesList rồi        i = r.nextInt(moveableDesList.size());
+        Cell moveCell = moveableDesList.get(i);
+        System.out.println(" tới vị trí (" + moveCell.x + " - " + moveCell.y);
+        play(moveCell);
     }
     
     // kiểm tra đến lượt của bên nào đi
