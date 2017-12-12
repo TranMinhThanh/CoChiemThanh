@@ -333,8 +333,9 @@ public class main extends JFrame implements MouseListener{
         Cell c = ((ArrayList<Cell>)team[computerColor]).get(i);
         System.out.print("Đi quân cờ từ vị trí (" + c.x + " - " + c.y);
         play(c);
-        //random vị trí đi, lúc này play đã tự fill dữ liệu vào moveableDesList rồi        i = r.nextInt(moveableDesList.size());
-        Cell moveCell = moveableDesList.get(i);
+        //random vị trí đi, lúc này play đã tự fill dữ liệu vào moveableDesList rồi
+        int j = r.nextInt(moveableDesList.size());
+        Cell moveCell = moveableDesList.get(j);
         System.out.println(" tới vị trí (" + moveCell.x + " - " + moveCell.y);
         play(moveCell);
     }
@@ -355,7 +356,10 @@ public class main extends JFrame implements MouseListener{
             
             // đổi bên đi
             forceColor ^= 1;
+            
         }
+        if (forceColor == computerColor)
+                computer_move();
     }
     
     // kiểm tra game kết thúc hay không

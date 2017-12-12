@@ -18,8 +18,8 @@ public abstract class Piece implements Cloneable{
 	private String id=null;
 	private String path;
 	protected ArrayList<Cell> moveableDesList = new ArrayList<Cell>();  //Protected (access from child classes)
-	public abstract ArrayList<Cell> move(Cell pos[][],int x,int y);  //Abstract Function. Must be overridden
-	
+	public abstract ArrayList<Cell> move(Cell pos[][],int x,int y);  //Abstract Function. Must be overridden   
+        
         public ArrayList<Cell> planeMove(Cell pos[][])
         {
             moveableDesList.clear();
