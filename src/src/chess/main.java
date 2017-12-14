@@ -20,6 +20,7 @@ import javax.swing.JSplitPane;
 import src.pieces.Knight;
 import java.lang.Object;
 import java.util.Random;
+import java.util.stream.IntStream;
 /**
  *
  * @author ThanhTM
@@ -88,8 +89,7 @@ public class main extends JFrame implements MouseListener{
         
         mainBoard = new main();
         mainBoard.setVisible(true);
-        
-        
+                
     }
     
     //contructor
@@ -326,11 +326,28 @@ public class main extends JFrame implements MouseListener{
     }
     
     // lượt đi của máy
-    public void computer_move(){
+    public void computer_move() {
         Random r = new Random();
-//        int i = r.ints(0, )
-//        Cell c = (team[computerColor]);
-                     
+        // random vị trí quân cờ
+        int i = r.nextInt(((ArrayList<Cell>)team[computerColor]).size());
+        Cell c = ((ArrayList<Cell>)team[computerColor]).get(i);
+        System.out.print("Đi quân cờ từ vị trí (" + c.x + " - " + c.y + ") ");
+        play(c);
+        
+        //random vị trí đi, lúc này play đã tự fill dữ liệu vào moveableDesList rồi
+        int j = r.nextInt(moveableDesList.size());
+        Cell moveCell = moveableDesList.get(j); 
+        System.out.println("tới vị trí (" + moveCell.x + " - " + moveCell.y + ")");
+        play(moveCell);
+        //khi luot 2 cua may di vao o may bay cua ben nguoi
+        if (moveCell == planeCell.get(humanColor))
+        {
+            moveableDesList.clear();
+            moveableDesList = moveCell.getPiece().planeMove(boardState);
+            i = r.nextInt(moveableDesList.size());
+            c = moveableDesList.get(i);
+            play(c);
+        }
     }
     
     // kiểm tra đến lượt của bên nào đi
@@ -349,7 +366,10 @@ public class main extends JFrame implements MouseListener{
             
             // đổi bên đi
             forceColor ^= 1;
+            
         }
+        if (forceColor == computerColor)
+                computer_move();
     }
     
     // kiểm tra game kết thúc hay không
